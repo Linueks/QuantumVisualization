@@ -1,3 +1,11 @@
+"""
+Reading the documentation of qutip
+https://qutip.org/docs/latest/guide/guide-states.html
+github@linueks
+"""
+
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import qutip as qt
