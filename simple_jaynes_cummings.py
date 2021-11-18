@@ -19,20 +19,21 @@ import matplotlib.pyplot as plt
 
 
 def create_jaynes_cummings(hilbert_space_levels=3, atom_energy_diff=1.0,
-                           cavity_energy_diff=1.25, interaction_strength=0.05):
+                           cavity_energy_diff=1.25, interaction_strength=0.05,
+                           num_atom_levels=2):
 
-    boson_annihilation = qt.tensor(qt.identity(2),
+    boson_annihilation = qt.tensor(qt.identity(num_atom_levels),
                                 qt.destroy(hilbert_space_levels))
-    boson_creation = qt.tensor(qt.identity(2),
+    boson_creation = qt.tensor(qt.identity(num_atom_levels),
                                 qt.create(hilbert_space_levels))
-
     #print(boson_annihilation.dag() == boson_creation)
-
-
-    atom_lowering = qt.tensor(qt.destroy(2), qt.identity(hilbert_space_levels))
-    atom_raising = qt.tensor(qt.create(2), qt.identity(hilbert_space_levels))
+    atom_lowering = qt.tensor(qt.destroy(num_atom_levels),
+                        qt.identity(hilbert_space_levels))
+    atom_raising = qt.tensor(qt.create(num_atom_levels),
+                        qt.identity(hilbert_space_levels))
     #print(atom_lowering.dag() == atom_raising)
     pauli_z = qt.tensor(qt.sigmaz(), qt.identity(hilbert_space_levels))
+
 
 
     atom_hamil = 0.5 * atom_energy_diff * pauli_z
@@ -41,8 +42,12 @@ def create_jaynes_cummings(hilbert_space_levels=3, atom_energy_diff=1.0,
         * (boson_creation * atom_lowering + boson_annihilation * atom_raising)
 
     hamiltonian = atom_hamil + cavity_hamil + interaction_hamil
+    operators = [boson_annihilation,
+                 boson_creation,
+                 atom_lowering,
+                 atom_raising]
 
-    return hamiltonian
+    return hamiltonian, operators
 
 
 
